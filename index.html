@@ -4,14 +4,47 @@
   <title>Home Page</title>
   <style>
     body {
-      text-align: center; /* Center align everything */
-      font-family: Arial, sans-serif;
+      background-color: black;
+      color: #00ff00;
+      font-family: "Courier New", monospace;
+      text-align: center;
+      padding-top: 20%;
     }
+
+    h1 {
+      font-size: 3em;
+      overflow: hidden; 
+      border-right: .15em solid #00ff00; /* Cursor effect */
+      white-space: nowrap;
+      margin: 0 auto;
+      letter-spacing: .15em;
+      animation: typing 3s steps(30, end), blink-caret .75s step-end infinite;
+    }
+
+    @keyframes typing {
+      from { width: 0 }
+      to { width: 100% }
+    }
+
+    @keyframes blink-caret {
+      from, to { border-color: transparent }
+      50% { border-color: #00ff00; }
+    }
+
     .link {
       position: fixed;
-      bottom: 20px; /* Stick link at bottom */
+      bottom: 20px;
       width: 100%;
       text-align: center;
+    }
+
+    .link a {
+      color: #00ff00;
+      text-decoration: none;
+      font-family: "Courier New", monospace;
+    }
+    .link a:hover {
+      text-shadow: 0 0 10px #00ff00;
     }
   </style>
 </head>
