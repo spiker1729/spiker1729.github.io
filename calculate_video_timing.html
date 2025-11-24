@@ -197,6 +197,36 @@
             50% { opacity: 0; }
         }
 
+        .divider {
+            margin: 40px 0;
+            height: 1px;
+            background: linear-gradient(to right, transparent, #00ff00, transparent);
+            position: relative;
+        }
+
+        .divider::after {
+            content: '[ OR ]';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 20, 0, 0.9);
+            padding: 5px 15px;
+            font-size: 10px;
+            color: #00ff00;
+            letter-spacing: 2px;
+        }
+
+        .section-title {
+            font-size: 14px;
+            color: #00ff00;
+            margin-bottom: 20px;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            opacity: 0.8;
+        }
+
         .footer {
             margin-top: 20px;
             text-align: center;
@@ -232,6 +262,20 @@
             .speed-btn {
                 padding: 8px 4px;
                 font-size: 10px;
+            }
+
+            .divider {
+                margin: 30px 0;
+            }
+
+            .divider::after {
+                font-size: 9px;
+                padding: 4px 12px;
+            }
+
+            .section-title {
+                font-size: 12px;
+                letter-spacing: 1px;
             }
         }
 
@@ -295,6 +339,39 @@
             <div class="result-label">[ TIME REQUIRED ]</div>
             <div class="result-value" id="output">
                 --:--<span class="blink">_</span>
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="section-title">⟨ REVERSE CALCULATE ⟩</div>
+
+        <div class="input-group">
+            <label for="videoLength2">Video Length (minutes)</label>
+            <input 
+                type="number" 
+                id="videoLength2" 
+                placeholder="60" 
+                min="0" 
+                step="0.1"
+            >
+        </div>
+
+        <div class="input-group">
+            <label for="desiredTime">Desired Time (minutes)</label>
+            <input 
+                type="number" 
+                id="desiredTime" 
+                placeholder="30" 
+                min="0" 
+                step="0.1"
+            >
+        </div>
+
+        <div class="result">
+            <div class="result-label">[ REQUIRED SPEED ]</div>
+            <div class="result-value" id="output2">
+                --x<span class="blink">_</span>
             </div>
         </div>
 
@@ -363,6 +440,32 @@
 
         // Initialize
         calculate();
+
+        // Reverse Calculator
+        const videoLength2Input = document.getElementById('videoLength2');
+        const desiredTimeInput = document.getElementById('desiredTime');
+        const output2 = document.getElementById('output2');
+
+        function calculateSpeed() {
+            const videoLength = parseFloat(videoLength2Input.value);
+            const desiredTime = parseFloat(desiredTimeInput.value);
+
+            if (!videoLength || !desiredTime || desiredTime <= 0) {
+                output2.innerHTML = '--x<span class="blink">_</span>';
+                return;
+            }
+
+            const requiredSpeed = videoLength / desiredTime;
+            const speedFormatted = requiredSpeed.toFixed(2);
+
+            output2.innerHTML = speedFormatted + 'x<span class="blink">_</span>';
+        }
+
+        videoLength2Input.addEventListener('input', calculateSpeed);
+        desiredTimeInput.addEventListener('input', calculateSpeed);
+
+        // Initialize reverse calculator
+        calculateSpeed();
     </script>
 </body>
 </html>
