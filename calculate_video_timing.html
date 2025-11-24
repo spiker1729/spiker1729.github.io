@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Time Calculator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: #0a0a0a;
+            color: #00ff00;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                repeating-linear-gradient(
+                    0deg,
+                    rgba(0, 255, 0, 0.03) 0px,
+                    transparent 1px,
+                    transparent 2px,
+                    rgba(0, 255, 0, 0.03) 3px
+                );
+            pointer-events: none;
+            animation: scan 8s linear infinite;
+        }
+
+        @keyframes scan {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(20px); }
+        }
+
+        .container {
+            background: rgba(0, 20, 0, 0.8);
+            border: 2px solid #00ff00;
+            border-radius: 4px;
+            padding: 30px;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+            position: relative;
+            z-index: 1;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 24px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            text-shadow: 0 0 10px #00ff00;
+        }
+
+        .header::before {
+            content: '> ';
+            color: #00ff00;
+        }
+
+        .header::after {
+            content: ' <';
+            color: #00ff00;
+        }
+
+        .input-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        label::before {
+            content: '// ';
+            color: #008800;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            background: #001100;
+            border: 1px solid #00ff00;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            font-size: 16px;
+            border-radius: 2px;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        input:focus {
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+            border-color: #00ff00;
+        }
+
+        input::placeholder {
+            color: #004400;
+        }
+
+        .speed-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .speed-btn {
+            padding: 10px 8px;
+            background: #001100;
+            border: 1px solid #00ff00;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            cursor: pointer;
+            border-radius: 2px;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        .speed-btn:hover {
+            background: #002200;
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+        }
+
+        .speed-btn.active {
+            background: #00ff00;
+            color: #000000;
+            font-weight: bold;
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.6);
+        }
+
+        .speed-btn:active {
+            transform: scale(0.95);
+        }
+
+        .result {
+            margin-top: 30px;
+            padding: 20px;
+            background: #001100;
+            border: 1px solid #00ff00;
+            border-radius: 2px;
+            text-align: center;
+            min-height: 80px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .result-label {
+            font-size: 12px;
+            margin-bottom: 10px;
+            color: #008800;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .result-value {
+            font-size: 24px;
+            font-weight: bold;
+            text-shadow: 0 0 10px #00ff00;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .blink {
+            animation: blink 1s step-start infinite;
+        }
+
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+
+        .footer {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 10px;
+            color: #004400;
+            letter-spacing: 1px;
+        }
+
+        /* Mobile responsive */
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+
+            .header {
+                font-size: 18px;
+                letter-spacing: 2px;
+            }
+
+            .result-value {
+                font-size: 20px;
+            }
+
+            input {
+                font-size: 14px;
+            }
+
+            .speed-buttons {
+                grid-template-columns: repeat(auto-fit, minmax(55px, 1fr));
+                gap: 6px;
+            }
+
+            .speed-btn {
+                padding: 8px 4px;
+                font-size: 10px;
+            }
+        }
+
+        /* Dark mode adjust for better visibility */
+        @media (prefers-color-scheme: dark) {
+            body {
+                background: #000000;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            vid.calc
+        </div>
+
+        <div class="input-group">
+            <label for="videoLength">Video Length (minutes)</label>
+            <input 
+                type="number" 
+                id="videoLength" 
+                placeholder="60" 
+                min="0" 
+                step="0.1"
+                autofocus
+            >
+        </div>
+
+        <div class="input-group">
+            <label for="playbackSpeed">Playback Speed</label>
+            <div class="speed-buttons">
+                <button class="speed-btn" data-speed="0.25">0.25x</button>
+                <button class="speed-btn" data-speed="0.5">0.5x</button>
+                <button class="speed-btn" data-speed="0.75">0.75x</button>
+                <button class="speed-btn active" data-speed="1">1x</button>
+                <button class="speed-btn" data-speed="1.25">1.25x</button>
+                <button class="speed-btn" data-speed="1.5">1.5x</button>
+                <button class="speed-btn" data-speed="1.75">1.75x</button>
+                <button class="speed-btn" data-speed="2">2x</button>
+                <button class="speed-btn" data-speed="2.5">2.5x</button>
+                <button class="speed-btn" data-speed="3">3x</button>
+                <button class="speed-btn" data-speed="4">4x</button>
+                <button class="speed-btn" data-speed="5">5x</button>
+                <button class="speed-btn" data-speed="10">10x</button>
+                <button class="speed-btn" data-speed="15">15x</button>
+                <button class="speed-btn" data-speed="20">20x</button>
+            </div>
+            <input 
+                type="number" 
+                id="playbackSpeed" 
+                placeholder="Custom speed" 
+                min="0.1" 
+                max="50" 
+                step="0.25"
+                value="1"
+            >
+        </div>
+
+        <div class="result">
+            <div class="result-label">[ TIME REQUIRED ]</div>
+            <div class="result-value" id="output">
+                --:--<span class="blink">_</span>
+            </div>
+        </div>
+
+        <div class="footer">
+            [SYSTEM READY] - ENTER VALUES TO CALCULATE
+        </div>
+    </div>
+
+    <script>
+        const videoLengthInput = document.getElementById('videoLength');
+        const playbackSpeedInput = document.getElementById('playbackSpeed');
+        const output = document.getElementById('output');
+        const speedButtons = document.querySelectorAll('.speed-btn');
+
+        function calculate() {
+            const videoLength = parseFloat(videoLengthInput.value);
+            const playbackSpeed = parseFloat(playbackSpeedInput.value);
+
+            if (!videoLength || !playbackSpeed || playbackSpeed <= 0) {
+                output.innerHTML = '--:--<span class="blink">_</span>';
+                return;
+            }
+
+            const timeRequired = videoLength / playbackSpeed;
+            const hours = Math.floor(timeRequired / 60);
+            const minutes = Math.floor(timeRequired % 60);
+            const seconds = Math.floor((timeRequired % 1) * 60);
+
+            let result = '';
+            if (hours > 0) {
+                result = `${hours}h ${minutes}m`;
+            } else if (minutes > 0) {
+                result = `${minutes}m ${seconds}s`;
+            } else {
+                result = `${seconds}s`;
+            }
+
+            output.innerHTML = result + '<span class="blink">_</span>';
+        }
+
+        function setSpeed(speed) {
+            playbackSpeedInput.value = speed;
+            speedButtons.forEach(btn => btn.classList.remove('active'));
+            const activeBtn = document.querySelector(`[data-speed="${speed}"]`);
+            if (activeBtn) {
+                activeBtn.classList.add('active');
+            }
+            calculate();
+        }
+
+        // Speed button clicks
+        speedButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const speed = btn.dataset.speed;
+                setSpeed(speed);
+            });
+        });
+
+        // Manual input handling
+        videoLengthInput.addEventListener('input', calculate);
+        playbackSpeedInput.addEventListener('input', () => {
+            // Remove active state from all buttons when typing custom value
+            speedButtons.forEach(btn => btn.classList.remove('active'));
+            calculate();
+        });
+
+        // Initialize
+        calculate();
+    </script>
+</body>
+</html>
+
