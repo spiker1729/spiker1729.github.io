@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Color Flash</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .color-container {
+            width: 100%;
+            height: 100%;
+            animation: colorCycle 2s infinite;
+        }
+
+        @keyframes colorCycle {
+            0%, 75% {
+                background-color: red;
+            }
+            75.01%, 100% {
+                background-color: blue;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="color-container"></div>
+</body>
+</html>
